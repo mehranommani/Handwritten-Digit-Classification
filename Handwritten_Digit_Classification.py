@@ -1,11 +1,19 @@
 from google.colab import drive
 drive.mount('/content/drive')
 
+import time
+import os
+import random
 import torch
 import torchvision
 import matplotlib.pyplot as plt
 import numpy as np
 import torchvision.transforms as T
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from tempfile import TemporaryDirectory
+from PIL import Image
+
 
 transform = T.Compose([
     T.ToTensor(),
@@ -16,14 +24,6 @@ ds = torchvision.datasets.ImageFolder(root="/content/drive/MyDrive/images/train"
 ds_test = torchvision.datasets.ImageFolder(root="/content/drive/MyDrive/images/test", transform=transform)
 
 """##sklearn Classification"""
-
-import torch
-import torchvision
-import matplotlib.pyplot as plt
-import numpy as np
-import torchvision.transforms as T
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
 
 # Preprocess the data
 X_train = []
@@ -70,9 +70,6 @@ dataloaders = {
     "val": torch.utils.data.DataLoader(ds_test, batch_size=4, shuffle=True, num_workers=4),
 }
 
-import time
-import os
-from tempfile import TemporaryDirectory
 
 def train_model(model, criterion, optimizer, scheduler, dataset_sizes, num_epochs=25):
     since = time.time()
@@ -142,11 +139,6 @@ def train_model(model, criterion, optimizer, scheduler, dataset_sizes, num_epoch
 
 class_names = ds.classes
 
-import random
-import os
-import matplotlib.pyplot as plt
-import torchvision.transforms as transforms
-from PIL import Image
 
 # Define the path to the "train" directory
 train_dir = '/content/drive/MyDrive/images/train'
@@ -170,9 +162,9 @@ image_path = os.path.join(image_dir, random_image_file)
 image = Image.open(image_path)
 
 # Define a transformation
-transform = transforms.Compose([
-    transforms.Resize((224, 224), antialias=True),  # Set antialias=True to suppress the warning
-    transforms.ToTensor(),
+transform = T.Compose([
+    T.Resize((224, 224), antialias=True),  # Set antialias=True to suppress the warning
+    T.ToTensor(),
     ])
 
 # Apply the transformation
